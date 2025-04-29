@@ -1,5 +1,5 @@
 import express from 'express';
-import User from '../../schema/regstur.js';
+import Students from '../../schema/regstur.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Dotenv from 'dotenv';
@@ -30,7 +30,7 @@ app.post('/login',async (req,res)=>{
     try{
     const {names , password ,code} = req.body;
 
-    const checkemail = await User.findOne({code});
+    const checkemail = await Students.findOne({code});
 
     // const isnamevalid =  names ===checkemail.names;
     

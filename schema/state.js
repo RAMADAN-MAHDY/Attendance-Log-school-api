@@ -9,7 +9,7 @@ const stateSchema = new mongoose.Schema({
       },
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Students',
         required: true
       },
       checkIn: {
