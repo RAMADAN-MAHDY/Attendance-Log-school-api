@@ -16,7 +16,7 @@ const port = 5000;
 app.use(express.json());
 
 const corsOptions= {
-    origin : "http://localhost:3000",
+    origin : "https://attendance-log-school.vercel.app",
     optionsSuccessStatus: 200,
 }
 app.use((req, res, next) => {
