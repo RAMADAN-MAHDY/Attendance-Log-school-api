@@ -40,8 +40,11 @@ app.use("/api" ,checkOut());
 // -------------get router----------//
 app.use("/api/router_Record" ,router_Record);
 app.use("/api/getUser" ,getUser);
+app.use("/api/router_IsUserPresentToday" ,router_IsUserPresentToday);
+//-----------------Excel sheet------------------//
 app.use("/api/router_Excel" ,router_Excel);
 app.use("/api/router_IsUserPresentToday" ,router_IsUserPresentToday);
+
 
 
 app.get('/', (req, res) => {

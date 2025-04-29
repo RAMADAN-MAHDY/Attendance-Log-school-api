@@ -2,12 +2,11 @@ import Students from '../../schema/regstur.js';
 import express from 'express';
 import bcrypt from 'bcryptjs';
 
-const CreatUser =()=>{
-const app = express();
-app.use(express.json());
+const CreatUser = () => {
+  const app = express();
+  app.use(express.json());
 
-
-app.post('/signup', async (req, res) => {
+  app.post('/signup', async (req, res) => {
     try {
       // استلام البيانات من body مباشرة بدون .formDataToSubmit
       const { fullName, password, code, phone, confirmPassword, grade, classRoom } = req.body;
@@ -50,6 +49,7 @@ app.post('/signup', async (req, res) => {
   
 return app ;
 
-}
+  return app;
+};
 
 export default CreatUser;
