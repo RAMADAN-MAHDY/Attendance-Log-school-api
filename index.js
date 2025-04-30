@@ -11,6 +11,7 @@ import router_Record from   './routers/get/existingRecord.js';
 import getUser from './routers/get/users.js'
 import router_Excel from './routers/TOExcelSheet/attendanceExport.js';
 import router_IsUserPresentToday from './routers/get/isUserPresentToday.js';
+import gradePromotionRouter from './routers/post/gradePromotion.js';
 const app = express();
 const port = 5000;
 app.use(express.json());
@@ -36,14 +37,16 @@ app.use("/api" ,Login());
 //handle presence and departure
 app.use("/api" ,checkIn());
 app.use("/api" ,checkOut());
+//handle grade promotion
+app.use("/api/gradePromotionRouter" ,gradePromotionRouter);
 
 // -------------get router----------//
+app.use("/api/router_IsUserPresentToday" ,router_IsUserPresentToday);
 app.use("/api/router_Record" ,router_Record);
 app.use("/api/getUser" ,getUser);
 app.use("/api/router_IsUserPresentToday" ,router_IsUserPresentToday);
 //-----------------Excel sheet------------------//
 app.use("/api/router_Excel" ,router_Excel);
-app.use("/api/router_IsUserPresentToday" ,router_IsUserPresentToday);
 
 
 
