@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './db.js';
 //  post director
 import checkIn from './routers/post/checkIn.js';
+import cancelCheckIn from './routers/post/cancelCheckIn.js';
 import checkOut from './routers/post/checkOut.js';
 import CreatUser from './routers/post/createUser.js';
 import Login from './routers/post/login.js'
@@ -12,10 +13,11 @@ import getUser from './routers/get/users.js'
 import router_Excel from './routers/TOExcelSheet/attendanceExport.js';
 import router_IsUserPresentToday from './routers/get/isUserPresentToday.js';
 import gradePromotionRouter from './routers/post/gradePromotion.js';
+// import { addStudentsSmart } from './routers/addFackStudents.js'; // عدّل المسار حسب مكان الملف
 const app = express();
 const port = 5000;
 app.use(express.json());
-
+// https://attendance-log-school.vercel.app
 const corsOptions= {
     origin : "https://attendance-log-school.vercel.app",
     optionsSuccessStatus: 200,
@@ -36,6 +38,7 @@ app.use("/api" ,CreatUser());
 app.use("/api" ,Login());
 //handle presence and departure
 app.use("/api" ,checkIn());
+app.use("/api" ,cancelCheckIn());
 app.use("/api" ,checkOut());
 //handle grade promotion
 app.use("/api/gradePromotionRouter" ,gradePromotionRouter);
@@ -51,6 +54,7 @@ app.use("/api/router_Excel" ,router_Excel);
 
 
 app.get('/', (req, res) => {
+    // addStudentsSmart(); // Uncomment this line to seed students
   res.send('Hello World!')
 })
 
