@@ -1,7 +1,7 @@
 import express from "express";
 import Students from "../../schema/regstur.js";
 import GraduatedStudents from "../../schema/GraduatedStudents.js";
-
+import StateSchema from "../../schema/state.js"
 const gradePromotionRouter = express.Router();
 
 const grades = [
@@ -51,6 +51,10 @@ gradePromotionRouter.post("/", async (req, res) => {
           { _id: student._id },
           { $set: { grade: newGrade } }
         );
+
+        // إعادة تعيين بيانات الحضور والغياب للسنة الجديدة
+
+        StateSchema.deleteMany({ user: student._id })
         promotedCount++;
       }
     }
