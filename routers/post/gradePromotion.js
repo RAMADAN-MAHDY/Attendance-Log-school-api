@@ -12,6 +12,7 @@ const grades = [
   "الصف الرابع",
   "الصف الخامس",
   "الصف السادس",
+  " النهايه",
 ];
 
 gradePromotionRouter.post("/", async (req, res) => {
@@ -34,7 +35,7 @@ gradePromotionRouter.post("/", async (req, res) => {
 
       const currentIndex = grades.indexOf(student.grade);
 
-    //   if (currentIndex === grades.length - 1) {
+      if (currentIndex === grades.length - 1) {
 
         // await GraduatedStudents.deleteMany({});
 
@@ -48,8 +49,18 @@ gradePromotionRouter.post("/", async (req, res) => {
         //   })
         // );
 
+        updatePromises.push(
+            Students.deleteOne({ _id: student._id }).then(() => {
+              graduatedCount++;  // حساب الطلاب الذين تم حذفهم
+            })
+          );
+
+
+
+        updatePromises.push(
+            StateSchema.deleteMany({ user: student._id }))
         // لا يتم حذف الطالب هنا
-    //   } else {
+      } else {
 
         const newGrade = grades[currentIndex + 1];
 
@@ -69,7 +80,7 @@ gradePromotionRouter.post("/", async (req, res) => {
           })
         );
       }
-    // }
+    }
 
     // انتظر حتى تكتمل جميع العمليات
     await Promise.all(updatePromises);

@@ -13,13 +13,13 @@ import getUser from './routers/get/users.js'
 import router_Excel from './routers/TOExcelSheet/attendanceExport.js';
 import router_IsUserPresentToday from './routers/get/isUserPresentToday.js';
 import gradePromotionRouter from './routers/post/gradePromotion.js';
-// import { addStudentsSmart } from './routers/addFackStudents.js'; // عدّل المسار حسب مكان الملف
+import { addStudentsSmart } from './routers/addFackStudents.js'; // عدّل المسار حسب مكان الملف
 const app = express();
 const port = 5000;
 app.use(express.json());
 // https://attendance-log-school.vercel.app
 const corsOptions= {
-    origin : "https://attendance-log-school.vercel.app",
+    origin : "*",
     optionsSuccessStatus: 200,
 }
 app.use((req, res, next) => {
@@ -54,7 +54,7 @@ app.use("/api/router_Excel" ,router_Excel);
 
 
 app.get('/', (req, res) => {
-    // addStudentsSmart(); // Uncomment this line to seed students
+    addStudentsSmart(); // Uncomment this line to seed students
   res.send('Hello World!')
 })
 
