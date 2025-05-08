@@ -34,22 +34,23 @@ gradePromotionRouter.post("/", async (req, res) => {
 
       const currentIndex = grades.indexOf(student.grade);
 
-      if (currentIndex === grades.length - 1) {
-        
-        await GraduatedStudents.deleteMany({});
+    //   if (currentIndex === grades.length - 1) {
+
+        // await GraduatedStudents.deleteMany({});
 
         // إضافة الطالب إلى المتخرجين باستخدام العملية المتوازية
-        updatePromises.push(
-          GraduatedStudents.create({
-            ...student.toObject(),
-            graduationDate: new Date(),
-          }).then(() => {
-            graduatedCount++;
-          })
-        );
+        // updatePromises.push(
+        //   GraduatedStudents.create({
+        //     ...student.toObject(),
+        //     graduationDate: new Date(),
+        //   }).then(() => {
+        //     graduatedCount++;
+        //   })
+        // );
 
         // لا يتم حذف الطالب هنا
-      } else {
+    //   } else {
+
         const newGrade = grades[currentIndex + 1];
 
         // تحديث الصف الجديد باستخدام العملية المتوازية
@@ -68,7 +69,7 @@ gradePromotionRouter.post("/", async (req, res) => {
           })
         );
       }
-    }
+    // }
 
     // انتظر حتى تكتمل جميع العمليات
     await Promise.all(updatePromises);
