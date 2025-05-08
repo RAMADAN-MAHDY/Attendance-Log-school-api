@@ -24,7 +24,8 @@ gradePromotionRouter.post("/", async (req, res) => {
     let graduatedCount = 0;
     let excludedCount = 0;
 
-    const updatePromises = [];  // لتخزين العمليات المتوازية
+    const studentUpdates = [];
+    const stateDeletes = [];
 
     for (const student of students) {
       if (excludedCodes.includes(student.code)) {
@@ -35,41 +36,50 @@ gradePromotionRouter.post("/", async (req, res) => {
       const currentIndex = grades.indexOf(student.grade);
 
       if (currentIndex === grades.length - 1) {
-        // إضافة الطالب إلى المتخرجين باستخدام العملية المتوازية
-        updatePromises.push(
-          GraduatedStudents.create({
-            ...student.toObject(),
-            graduationDate: new Date(),
-          }).then(() => {
-            graduatedCount++;
-          })
-        );
+        // إضافة الطالب إلى المتخرجين
+        studentUpdates.push({
+          insertOne: {
+            document: {
+              ...student.toObject(),
+              graduationDate: new Date(),
+            },
+          },
+        });
 
-        // لا يتم حذف الطالب هنا
+        // لا يتم حذف الطالب من الطلاب
       } else {
         const newGrade = grades[currentIndex + 1];
 
-        // تحديث الصف الجديد باستخدام العملية المتوازية
-        updatePromises.push(
-          Students.updateOne(
-            { _id: student._id },
-            { $set: { grade: newGrade } }
-          ).then(() => {
-            promotedCount++;
-          })
-        );
+        // تحديث الصف الجديد للطالب
+        studentUpdates.push({
+          updateOne: {
+            filter: { _id: student._id },
+            update: { $set: { grade: newGrade } },
+          },
+        });
 
-        // حذف بيانات الحضور والغياب باستخدام العملية المتوازية
-        updatePromises.push(
-          StateSchema.deleteMany({ user: student._id }).then(() => {
-            // يمكن إضافة أي معالجة إضافية هنا لو لزم الأمر
-          })
-        );
+        // حذف بيانات الحضور والغياب
+        stateDeletes.push({
+          deleteMany: {
+            filter: { user: student._id },
+          },
+        });
       }
     }
 
-    // انتظر حتى تكتمل جميع العمليات
-    await Promise.all(updatePromises);
+    // إجراء جميع التحديثات والحذف دفعة واحدة باستخدام bulkWrite
+    if (studentUpdates.length > 0) {
+      await Students.bulkWrite(studentUpdates);
+    }
+
+    if (stateDeletes.length > 0) {
+      await StateSchema.bulkWrite(stateDeletes);
+    }
+
+    // إضافة الطلاب المتخرجين دفعة واحدة
+    if (graduatedCount > 0) {
+      await GraduatedStudents.bulkWrite(studentUpdates.filter(update => update.insertOne));
+    }
 
     res.json({
       message: "تم الترحيل بنجاح",
