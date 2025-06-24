@@ -3,9 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import connectDB from './db.js';
 //  post director
-import checkIn from './routers/post/checkIn.js';
-import cancelCheckIn from './routers/post/cancelCheckIn.js';
-import checkOut from './routers/post/checkOut.js';
+// import checkInRouter from './routers/post/checkIn.js';
+// import cancelCheckIn from './routers/post/cancelCheckIn.js';
+// import checkOut from './routers/post/checkOut.js';
 import CreatUser from './routers/post/createUser.js';
 import Login from './routers/post/login.js'
 import router_Record from   './routers/get/existingRecord.js';
@@ -37,9 +37,9 @@ connectDB();
 app.use("/api" ,CreatUser());
 app.use("/api" ,Login());
 //handle presence and departure
-app.use("/api" ,checkIn());
-app.use("/api" ,cancelCheckIn());
-app.use("/api" ,checkOut());
+// app.use("/api" ,checkInRouter);
+// app.use("/api" ,cancelCheckIn());
+// app.use("/api" ,checkOut());
 //handle grade promotion
 app.use("/api/gradePromotionRouter" ,gradePromotionRouter);
 
@@ -54,7 +54,7 @@ app.use("/api/router_Excel" ,router_Excel);
 
 
 app.get('/', (req, res) => {
-    addStudentsSmart(); // Uncomment this line to seed students
+    // addStudentsSmart(); // Uncomment this line to seed students
   res.send('Hello World!')
 })
 

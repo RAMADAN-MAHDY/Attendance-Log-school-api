@@ -33,4 +33,57 @@ router_IsUserPresentToday.get('/', async (req, res) => {
     }
 });
 
+router_IsUserPresentToday.put('/update/:id', async (req, res) => {
+    try {
+        const { status } = req.body;
+        const { id } = req.params;
+        console.log(status)
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        // التأكد من وجود سجل بنفس اليوم
+        let record = await StateSchema.findOne({
+            user: id,
+            date: startOfDay
+        }).populate('user', 'names');
+
+        if (record) {
+            record.status = status;
+            if (status === "Present") {
+                record.checkIn = now;
+            } else {
+                record.checkIn = null;
+            }
+            await record.save();
+        } else {
+            record = await StateSchema.create({
+                user: id,
+                status,
+                date: startOfDay,
+                checkIn: status === "Present" ? now : null
+            });
+        }
+
+        return res.status(200).json({
+            userId: record.user?._id || null,
+            userName: record.user?.names || 'غير معروف',
+            status: record.status
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'حدث خطأ أثناء التحديث' });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
 export default router_IsUserPresentToday;

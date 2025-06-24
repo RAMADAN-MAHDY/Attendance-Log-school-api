@@ -1,27 +1,29 @@
 import mongoose from "mongoose";
 
 const stateSchema = new mongoose.Schema({
- 
+    date: {
+        type: Date,
+        required: true
+    },
     status: {
         type: String,
         enum: ['Present', 'Absent'],
         default: 'Absent'
-      },
-      user: {
+    },
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Students',
         required: true
-      },
-      checkIn: {
+    },
+    checkIn: {
         type: Date,
         default: null
-      },
-      checkOut: {
+    },
+    checkOut: {
         type: Date,
         default: null
-      },
-}, { timestamps: true })
+    }
+}, { timestamps: true });
 
-
-const StateSchema = mongoose.model('State' , stateSchema);
+const StateSchema = mongoose.model('State', stateSchema);
 export default StateSchema;
