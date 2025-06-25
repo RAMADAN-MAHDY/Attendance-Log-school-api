@@ -38,27 +38,29 @@ router_IsUserPresentToday.put('/update/:id', async (req, res) => {
         const { status } = req.body;
         const { id } = req.params;
         console.log(status)
-        const now = new Date();
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const now = new Date();
+const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const endOfDay = new Date(startOfDay);
+endOfDay.setDate(startOfDay.getDate() + 1);
 
-        // التأكد من وجود سجل بنفس اليوم
-        let record = await StateSchema.findOne({
-            user: id,
-            date: startOfDay
-        }).populate('user', 'names');
+// التأكد من وجود سجل بنفس اليوم
+let record = await StateSchema.findOne({
+    user: id,
+    date: { $gte: startOfDay, $lt: endOfDay }
+}).populate('user', 'names');
 
-        if (record) {
-            record.status = status;
-            record.checkIn = now;
-            await record.save();
-        } else {
-            record = await StateSchema.create({
-                user: id,
-                status,
-                date: startOfDay,
-                checkIn: now
-            });
-        }
+if (record) {
+    record.status = status;
+    record.checkIn = now;
+    await record.save();
+} else {
+    record = await StateSchema.create({
+        user: id,
+        status,
+        date: startOfDay,
+        checkIn: now
+    });
+}
 
         return res.status(200).json({
             userId: record.user?._id || null,
