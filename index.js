@@ -6,6 +6,7 @@ import connectDB from './db.js';
 // import checkInRouter from './routers/post/checkIn.js';
 // import cancelCheckIn from './routers/post/cancelCheckIn.js';
 // import checkOut from './routers/post/checkOut.js';
+import P_R_markClassPresent from './routers/post/markClassAttendance.js' 
 import CreatUser from './routers/post/createUser.js';
 import Login from './routers/post/login.js'
 import router_Record from   './routers/get/existingRecord.js';
@@ -13,13 +14,13 @@ import getUser from './routers/get/users.js'
 import router_Excel from './routers/TOExcelSheet/attendanceExport.js';
 import router_IsUserPresentToday from './routers/get/isUserPresentToday.js';
 import gradePromotionRouter from './routers/post/gradePromotion.js';
-import { addStudentsSmart } from './routers/addFackStudents.js'; // عدّل المسار حسب مكان الملف
+import { addStudentsSmart } from './routers/helpers/addFackStudents.js'; // عدّل المسار حسب مكان الملف
 const app = express();
 const port = 5000;
 app.use(express.json());
 // https://attendance-log-school.vercel.app
 const corsOptions= {
-    origin : "*",
+    origin : "https://attendance-log-school.vercel.app",
     optionsSuccessStatus: 200,
 }
 app.use((req, res, next) => {
@@ -42,6 +43,7 @@ app.use("/api" ,Login());
 // app.use("/api" ,checkOut());
 //handle grade promotion
 app.use("/api/gradePromotionRouter" ,gradePromotionRouter);
+app.use("/api/markPresent" ,P_R_markClassPresent);
 
 // -------------get router----------//
 app.use("/api/router_IsUserPresentToday" ,router_IsUserPresentToday);

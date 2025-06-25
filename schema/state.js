@@ -8,7 +8,7 @@ const stateSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['Present', 'Absent'],
-        default: 'Absent'
+        default: 'Present'
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

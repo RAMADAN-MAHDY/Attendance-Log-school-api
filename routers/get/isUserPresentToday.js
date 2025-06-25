@@ -49,18 +49,14 @@ router_IsUserPresentToday.put('/update/:id', async (req, res) => {
 
         if (record) {
             record.status = status;
-            if (status === "Present") {
-                record.checkIn = now;
-            } else {
-                record.checkIn = null;
-            }
+            record.checkIn = now;
             await record.save();
         } else {
             record = await StateSchema.create({
                 user: id,
                 status,
                 date: startOfDay,
-                checkIn: status === "Present" ? now : null
+                checkIn: now
             });
         }
 
