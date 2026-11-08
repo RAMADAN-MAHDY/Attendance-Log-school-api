@@ -56,7 +56,7 @@ app.use("/api/router_Excel" ,router_Excel);
 
 
 app.get('/', (req, res) => {
-    addStudentsSmart(); // Uncomment this line to seed students
+    // addStudentsSmart(); // Uncomment this line to seed students
   res.send('Hello World!')
 })
 
